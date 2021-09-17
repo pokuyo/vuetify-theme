@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- <p class="text-2xl font-weight-semibold text--primary mb-2">마이페이지</p> -->
+    <h4>내정보</h4>
     <v-simple-table class="myinfo-table">
       <tbody>
         <tr>

@@ -9,21 +9,22 @@
             class="d-flex align-center"
           >
             <v-img
-              :src="require('@/assets/images/logos/logo.svg')"
-              max-height="30px"
-              max-width="30px"
+              :src="require('@/assets/images/logos/PAMASTER_EN.png')"
+              max-height="100px"
+              max-width="170px"
               alt="logo"
               contain
               class="me-3 "
             ></v-img>
 
-            <h2 class="text-2xl font-weight-semibold">
+            <!-- <h2 class="text-2xl font-weight-semibold">
               Materio
-            </h2>
+            </h2> -->
           </router-link>
         </v-card-title>
 
         <!-- title -->
+        <!--
         <v-card-text>
           <p class="text-2xl font-weight-semibold text--primary mb-2">
             Welcome to Materio! 👋🏻
@@ -32,6 +33,7 @@
             Please sign-in to your account and start the adventure
           </p>
         </v-card-text>
+        -->
 
         <!-- login form -->
         <v-card-text>
@@ -39,8 +41,8 @@
             <v-text-field
               v-model="email"
               outlined
-              label="Email"
-              placeholder="john@example.com"
+              label="ID"
+              placeholder="아이디를 입력 해주세요"
               hide-details
               class="mb-3"
             ></v-text-field>
@@ -50,7 +52,7 @@
               outlined
               :type="isPasswordVisible ? 'text' : 'password'"
               label="Password"
-              placeholder="············"
+              placeholder="비밀번호를 입력 해주세요"
               :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
               hide-details
               @click:append="isPasswordVisible = !isPasswordVisible"
@@ -58,7 +60,7 @@
 
             <div class="d-flex align-center justify-space-between flex-wrap">
               <v-checkbox
-                label="Remember Me"
+                label="아이디저장"
                 hide-details
                 class="me-3 mt-1"
               >
@@ -77,6 +79,7 @@
               block
               color="primary"
               class="mt-6"
+              @click="userlogin"
             >
               Login
             </v-btn>
@@ -94,13 +97,16 @@
         </v-card-text>
 
         <!-- divider -->
+        <!--
         <v-card-text class="d-flex align-center mt-2">
           <v-divider></v-divider>
           <span class="mx-5">or</span>
           <v-divider></v-divider>
         </v-card-text>
+         -->
 
         <!-- social links -->
+        <!--
         <v-card-actions class="d-flex justify-center">
           <v-btn
             v-for="link in socialLink"
@@ -113,6 +119,7 @@
             </v-icon>
           </v-btn>
         </v-card-actions>
+         -->
       </v-card>
     </div>
 
@@ -143,48 +150,72 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
+import { /* mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, */ mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
+
+// import { login } from '../../api/authentication/auth'
 
 export default {
   setup() {
     const isPasswordVisible = ref(false)
     const email = ref('')
     const password = ref('')
-    const socialLink = [
-      {
-        icon: mdiFacebook,
-        color: '#4267b2',
-        colorInDark: '#4267b2',
-      },
-      {
-        icon: mdiTwitter,
-        color: '#1da1f2',
-        colorInDark: '#1da1f2',
-      },
-      {
-        icon: mdiGithub,
-        color: '#272727',
-        colorInDark: '#fff',
-      },
-      {
-        icon: mdiGoogle,
-        color: '#db4437',
-        colorInDark: '#db4437',
-      },
-    ]
+
+    // const socialLink = [
+    //   {
+    //     icon: mdiFacebook,
+    //     color: '#4267b2',
+    //     colorInDark: '#4267b2',
+    //   },
+    //   {
+    //     icon: mdiTwitter,
+    //     color: '#1da1f2',
+    //     colorInDark: '#1da1f2',
+    //   },
+    //   {
+    //     icon: mdiGithub,
+    //     color: '#272727',
+    //     colorInDark: '#fff',
+    //   },
+    //   {
+    //     icon: mdiGoogle,
+    //     color: '#db4437',
+    //     colorInDark: '#db4437',
+    //   },
+    // ]
 
     return {
       isPasswordVisible,
       email,
       password,
-      socialLink,
+
+      // socialLink,
 
       icons: {
         mdiEyeOutline,
         mdiEyeOffOutline,
       },
     }
+  },
+  methods: {
+    userlogin() {
+      // const frm = new FormData()
+      // frm.append('id', this.email)
+      // frm.append('password', this.password)
+      const params = {
+        usr_id: this.email,
+        usr_pw: this.password,
+      }
+      this.$store.dispatch('RETRIEVE_LOGIN', params)
+
+      // login(params)
+      //   .then(response => {
+      //     console.log('response', response)
+      //   })
+      //   .catch(error => {
+      //     console.log('error', error)
+      //   })
+    },
   },
 }
 </script>
