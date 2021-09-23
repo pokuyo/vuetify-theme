@@ -42,6 +42,8 @@ import ProcessingReport from './ProcessingReport.vue'
 import ProcessingReportDetail from './ProcessingReportDetail.vue'
 import DashboardDatatable from './DashboardDatatable.vue'
 
+import * as test from '@/api/test/test'
+
 export default {
   components: {
     UserProfile,
@@ -93,6 +95,12 @@ export default {
       newProject,
       salesQueries,
     }
+  },
+  created() {
+    const params = {
+      page: 1,
+    }
+    test.test(params)
   },
 }
 </script>

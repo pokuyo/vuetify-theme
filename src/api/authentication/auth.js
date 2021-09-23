@@ -1,8 +1,10 @@
 import axios from '@/plugins/axios'
 
+// import { httpSend } from '@/api'
+
 // login
 function login(params) {
-  return axios.post('http://localhost:9000/api/user/signin', params)
+  return axios.post('/api/user/signin', params)
 }
 
 export {

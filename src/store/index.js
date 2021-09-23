@@ -1,12 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import userStore from '@/store/module/auth/userStore'
+import userstore from './modules/userstore'
+
+// import { login } from '../api/authentication/auth'
+
+// TODO: store목록 미호출, 서버 기동시 항목 호출 개선 필요
+// import modules from '@/store/modules'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
+  // modules,
+
   modules: {
-    userStore,
+    userstore,
   },
 })
+
+export default store

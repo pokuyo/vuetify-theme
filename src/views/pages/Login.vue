@@ -153,36 +153,14 @@
 import { /* mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, */ mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
 
-// import { login } from '../../api/authentication/auth'
+import { login } from '@/api/authentication/auth'
+import router from '@/router'
 
 export default {
   setup() {
     const isPasswordVisible = ref(false)
     const email = ref('')
     const password = ref('')
-
-    // const socialLink = [
-    //   {
-    //     icon: mdiFacebook,
-    //     color: '#4267b2',
-    //     colorInDark: '#4267b2',
-    //   },
-    //   {
-    //     icon: mdiTwitter,
-    //     color: '#1da1f2',
-    //     colorInDark: '#1da1f2',
-    //   },
-    //   {
-    //     icon: mdiGithub,
-    //     color: '#272727',
-    //     colorInDark: '#fff',
-    //   },
-    //   {
-    //     icon: mdiGoogle,
-    //     color: '#db4437',
-    //     colorInDark: '#db4437',
-    //   },
-    // ]
 
     return {
       isPasswordVisible,
@@ -199,22 +177,20 @@ export default {
   },
   methods: {
     userlogin() {
-      // const frm = new FormData()
-      // frm.append('id', this.email)
-      // frm.append('password', this.password)
       const params = {
         usr_id: this.email,
         usr_pw: this.password,
       }
-      this.$store.dispatch('RETRIEVE_LOGIN', params)
 
-      // login(params)
-      //   .then(response => {
-      //     console.log('response', response)
-      //   })
-      //   .catch(error => {
-      //     console.log('error', error)
-      //   })
+      login(params)
+        .then(response => {
+          console.log('▶ login response', response)
+          this.$store.dispatch('userstore/retrieveLogin', response)
+          router.push({ path: '/dashboard' })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
   },
 }

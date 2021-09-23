@@ -1,6 +1,7 @@
-import { login } from '../../../api/authentication/auth'
+import { login } from '../../api/authentication/auth'
 
-export const loginModule = {
+const teststore = {
+  // namespaced: true,
 
   // state
   state: {
@@ -11,21 +12,18 @@ export const loginModule = {
 
   // mutation
   mutations: {
-    SET_LOGIN(state, accessToken) {
-      state.accessToken = accessToken
-    },
-    SET_LOGOUT(state, accessToken) {
+    SET_TEST(state, accessToken) {
       state.accessToken = accessToken
     },
   },
 
   // actions
   actions: {
-    retrieveLogin({ commit }, params) {
-      login(params)
+    async retrieveTest({ commit }, payload) {
+      login(payload)
         .then(response => {
           console.log(response)
-          commit('SET_LOGIN')
+          commit('SET_TEST')
         })
         .catch(error => {
           console.log(error)
@@ -34,6 +32,4 @@ export const loginModule = {
   },
 }
 
-export default {
-  loginModule,
-}
+export default teststore
