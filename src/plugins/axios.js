@@ -5,17 +5,17 @@ const prefix = 'Bearer '
 
 // request interceptor
 axios.interceptors.request.use(config => {
-  console.log('■ request interceptor ----------[S]')
+  // console.log('■ request interceptor ----------[S]')
 
-  // eslint-disable-next-line no-alert
-  console.log('request -> get authorization :: ', stoarge.getItem('authorization'))
+  // // eslint-disable-next-line no-alert
+  // console.log('request -> get authorization :: ', stoarge.getItem('authorization'))
 
   // eslint-disable-next-line no-param-reassign
   config.headers.Authorization = prefix + stoarge.getItem('authorization')
 
-  // console.log('▶ interceptor config', config)
+  // // console.log('▶ interceptor config', config)
 
-  console.log('■ request interceptor ----------[E]')
+  // console.log('■ request interceptor ----------[E]')
 
   return config
 }, error => {
@@ -26,20 +26,22 @@ axios.interceptors.request.use(config => {
 
 // response interceptor
 axios.interceptors.response.use(response => {
-  console.log('■ response interceptor ----------[S]')
+  // console.log('■ response interceptor ----------[S]')
 
-  // console.log('▶ interceptor response', response)
-  // eslint-disable-next-line no-alert
-  console.log('response -> set authorization :: ', response.headers.authorization)
+  // // console.log('▶ interceptor response', response)
+  // // eslint-disable-next-line no-alert
+  // console.log('response -> set authorization :: ', response.headers.authorization)
 
   stoarge.setItem('authorization', response.headers.authorization)
-  console.log('■ response interceptor ----------[E]')
+
+  // console.log('■ response interceptor ----------[E]')
 
   return response
 }, error => {
   console.log('■ request interceptor error', error)
+  window.location.href = '/pages/login'
 
-  return Promise.reject(error.response)
+  // return Promise.reject(error.response)
 })
 
 export default axios

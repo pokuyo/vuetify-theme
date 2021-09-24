@@ -31,21 +31,8 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/named
-import { requestdata } from '../../api/test/test'
+import { dashboardsample } from '@/api/dashboard/dashboard'
 
-// const tempList = [
-//   { projectno: '0000-0001', projectstep: 200, projectname: '테스트데이터1' },
-//   { projectno: '0000-0002', projectstep: 200, projectname: '테스트데이터2' },
-//   { projectno: '0000-0003', projectstep: 200, projectname: '테스트데이터3' },
-//   { projectno: '0000-0004', projectstep: 200, projectname: '테스트데이터4' },
-//   { projectno: '0000-0005', projectstep: 200, projectname: '테스트데이터5' },
-//   { projectno: '0000-0006', projectstep: 200, projectname: '테스트데이터6' },
-//   { projectno: '0000-0007', projectstep: 200, projectname: '테스트데이터7' },
-//   { projectno: '0000-0008', projectstep: 200, projectname: '테스트데이터8' },
-//   { projectno: '0000-0009', projectstep: 200, projectname: '테스트데이터9' },
-//   { projectno: '0000-0010', projectstep: 200, projectname: '테스트데이터10' },
-// ]
 export default {
   data() {
     return {
@@ -54,6 +41,11 @@ export default {
   },
   created() {
     this.retrieveProjectListByStep(200)
+
+    // EventBus 사용시 동일 레벨간 이벤트 전달이 가능
+    this.$EventBus.$on('retrieveDetail', () => {
+      this.getData()
+    })
   },
   methods: {
     retrieveProjectListByStep(stepCd) {
@@ -63,14 +55,21 @@ export default {
     },
     getData() {
       console.log('getData')
-      requestdata()
+      dashboardsample()
         .then(response => {
           console.log(response)
-          this.projectList = response.data.data.contents
+          if (response.data.result) {
+            this.projectList = response.data.data.contents
+          } else {
+            this.projectList = {}
+          }
         })
         .catch(error => {
           console.log(error)
         })
+    },
+    testdata() {
+      console.log('message receive')
     },
   },
 }

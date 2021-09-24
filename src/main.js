@@ -11,6 +11,7 @@ import axios from './plugins/axios'
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
+Vue.prototype.$EventBus = new Vue()
 
 new Vue({
   router,

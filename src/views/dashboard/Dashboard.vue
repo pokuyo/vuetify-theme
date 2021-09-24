@@ -15,7 +15,8 @@
       cols="12"
       md="3"
     >
-      <processing-report></processing-report>
+      <processing-report />
+      <!-- @retrieveDetail="retrieveDetail" -->
     </v-col>
 
     <v-col
@@ -23,11 +24,11 @@
       sm="4"
       md="6"
     >
-      <processing-report-detail></processing-report-detail>
+      <processing-report-detail />
     </v-col>
 
     <v-col cols="12">
-      <dashboard-datatable></dashboard-datatable>
+      <dashboard-datatable />
     </v-col>
   </v-row>
 </template>
@@ -42,7 +43,7 @@ import ProcessingReport from './ProcessingReport.vue'
 import ProcessingReportDetail from './ProcessingReportDetail.vue'
 import DashboardDatatable from './DashboardDatatable.vue'
 
-import * as test from '@/api/test/test'
+import * as dashboard from '@/api/dashboard/dashboard'
 
 export default {
   components: {
@@ -100,7 +101,12 @@ export default {
     const params = {
       page: 1,
     }
-    test.test(params)
+    dashboard.requestdata(params)
+  },
+  methods: {
+    // retrieveDetail() {
+    //   console.log('test123')
+    // },
   },
 }
 </script>

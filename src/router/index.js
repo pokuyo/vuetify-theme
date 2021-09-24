@@ -1,7 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+// import store from '@/store'
+
 Vue.use(VueRouter)
+
+// const requireAuth = () => (to, from, next) => {
+//   if (store.state.accessToken !== '') {
+//     return next()
+//   }
+//   next('/login')
+// }
 
 const routes = [
   {
@@ -12,6 +21,8 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@/views/dashboard/Dashboard.vue'),
+
+    // beforeEnter: requireAuth(),
   },
 
   // {
