@@ -32,7 +32,7 @@
 
 <script>
 // eslint-disable-next-line import/named
-import { retrieveSampleData } from '../../api/index'
+import { requestdata } from '../../api/test/test'
 
 // const tempList = [
 //   { projectno: '0000-0001', projectstep: 200, projectname: '테스트데이터1' },
@@ -63,7 +63,7 @@ export default {
     },
     getData() {
       console.log('getData')
-      retrieveSampleData()
+      requestdata()
         .then(response => {
           console.log(response)
           this.projectList = response.data.data.contents
