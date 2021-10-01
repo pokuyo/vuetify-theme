@@ -67,8 +67,10 @@
           target="_blank"
         ></nav-menu-link>
       </nav-menu-group>
+
+      <!-- [S]Sample Group -->
       <nav-menu-group
-        title="TestGroup"
+        title="Sample"
         :icon="icons.mdiAccountCogOutline"
       >
         <nav-menu-link
@@ -76,7 +78,13 @@
           :to="{ name: 'pages-login' }"
           target="blank"
         ></nav-menu-link>
+        <nav-menu-link
+          title="DataTable"
+          :to="{ name: 'datatable' }"
+          target="blank"
+        ></nav-menu-link>
       </nav-menu-group>
+      <!-- [E]Sample Group -->
 
       <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title>
       <nav-menu-link
@@ -110,13 +118,13 @@
       target="_blank"
       rel="nofollow"
     >
-      <v-img
+      <!-- <v-img
         :src="require(`@/assets/images/pro/upgrade-banner-${$vuetify.theme.dark ? 'dark' : 'light'}.png`)"
         alt="upgrade-banner"
         transition="scale-transition"
         class="upgrade-banner mx-auto"
         max-width="230"
-      ></v-img>
+      ></v-img> -->
     </a>
   </v-navigation-drawer>
 </template>

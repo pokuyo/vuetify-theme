@@ -16,24 +16,8 @@
               contain
               class="me-3 "
             ></v-img>
-
-            <!-- <h2 class="text-2xl font-weight-semibold">
-              Materio
-            </h2> -->
           </router-link>
         </v-card-title>
-
-        <!-- title -->
-        <!--
-        <v-card-text>
-          <p class="text-2xl font-weight-semibold text--primary mb-2">
-            Welcome to Materio! 👋🏻
-          </p>
-          <p class="mb-2">
-            Please sign-in to your account and start the adventure
-          </p>
-        </v-card-text>
-        -->
 
         <!-- login form -->
         <v-card-text>
@@ -75,6 +59,7 @@
               </a>
             </div>
 
+            <!-- login button -->
             <v-btn
               block
               color="primary"
@@ -83,6 +68,12 @@
             >
               Login
             </v-btn>
+
+            <layer-alert
+              v-if="notice"
+              :message="message"
+              @closeDialog="closeDialog"
+            />
           </v-form>
         </v-card-text>
 
@@ -97,29 +88,11 @@
         </v-card-text>
 
         <!-- divider -->
-        <!--
-        <v-card-text class="d-flex align-center mt-2">
+        <!-- <v-card-text class="d-flex align-center mt-2">
           <v-divider></v-divider>
           <span class="mx-5">or</span>
           <v-divider></v-divider>
-        </v-card-text>
-         -->
-
-        <!-- social links -->
-        <!--
-        <v-card-actions class="d-flex justify-center">
-          <v-btn
-            v-for="link in socialLink"
-            :key="link.icon"
-            icon
-            class="ms-1"
-          >
-            <v-icon :color="$vuetify.theme.dark ? link.colorInDark : link.color">
-              {{ link.icon }}
-            </v-icon>
-          </v-btn>
-        </v-card-actions>
-         -->
+        </v-card-text> -->
       </v-card>
     </div>
 
@@ -129,34 +102,23 @@
       height="173"
       :src="require(`@/assets/images/misc/mask-${$vuetify.theme.dark ? 'dark':'light'}.png`)"
     >
-
-    <!-- tree -->
-    <v-img
-      class="auth-tree"
-      width="247"
-      height="185"
-      src="@/assets/images/misc/tree.png"
-    ></v-img>
-
-    <!-- tree  -->
-    <v-img
-      class="auth-tree-3"
-      width="377"
-      height="289"
-      src="@/assets/images/misc/tree-3.png"
-    ></v-img>
   </div>
 </template>
 
 <script>
-// eslint-disable-next-line object-curly-newline
-import { /* mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, */ mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
+import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
-
 import { login } from '@/api/authentication/auth'
 import router from '@/router'
 
+// TODO: layerAlert layout 수정 필요
+import LayerAlert from '@/components/ui-components/LayerAlert.vue'
+
 export default {
+  components: {
+    LayerAlert,
+  },
+
   setup() {
     const isPasswordVisible = ref(false)
     const email = ref('')
@@ -166,20 +128,27 @@ export default {
       isPasswordVisible,
       email,
       password,
-
-      // socialLink,
-
       icons: {
         mdiEyeOutline,
         mdiEyeOffOutline,
       },
+      notice: false,
+      message: 'id, password를 확인하세요',
     }
   },
+
   methods: {
+    // user login
     userlogin() {
       const params = {
         usr_id: this.email,
         usr_pw: this.password,
+      }
+
+      if (this.email === '' && this.password === '') {
+        this.notice = true
+
+        return
       }
 
       login(params)
@@ -191,6 +160,10 @@ export default {
         .catch(error => {
           console.log(error)
         })
+      this.notice = false
+    },
+    closeDialog() {
+      this.notice = false
     },
   },
 }

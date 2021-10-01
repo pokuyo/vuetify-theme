@@ -27,7 +27,7 @@ module.exports = {
     'lines-around-comment': [
       'error',
       {
-        beforeBlockComment: true,
+        beforeBlockComment: false,
         beforeLineComment: true,
         allowBlockStart: true,
         allowClassStart: true,
