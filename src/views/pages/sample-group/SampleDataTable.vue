@@ -73,13 +73,27 @@ export default {
 
       // [S]RISK GRID
       riskGridHeader: [
-        { text: 'RISK_CD', value: 'RISK_CD' },
-        { text: 'UPPER_RISK_CD', value: 'UPPER_RISK_CD' },
-        { text: 'RISK_NM', value: 'RISK_NM' },
-        { text: 'RISK_RELIMP', value: 'RISK_RELIMP' },
-        { text: 'RISK_PNT', value: 'RISK_PNT' },
-        { text: 'META_3', value: 'META_3' },
-        { text: 'USE_YN', value: 'USE_YN' },
+        {
+          text: '삭제', align: 'center', value: 'RISK_CD', sortable: false,
+        },
+        {
+          text: '위험도 코드', align: 'center', value: 'UPPER_RISK_CD', sortable: false,
+        },
+        {
+          text: '위험도 상위코드', align: 'center', value: 'RISK_NM', sortable: false,
+        },
+        {
+          text: '위험도 내용', align: 'center', value: 'RISK_RELIMP', sortable: false,
+        },
+        {
+          text: '위험도 비중', align: 'center', value: 'RISK_PNT', sortable: false,
+        },
+        {
+          text: '위험도 점수', align: 'center', value: 'META_3', sortable: false,
+        },
+        {
+          text: '위험도 사용여부', align: 'center', value: 'USE_YN', sortable: false,
+        },
       ],
       riskGridItems: [],
       riskGridDefaultItems: {
