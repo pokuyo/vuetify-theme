@@ -1,60 +1,73 @@
 <template>
-  <v-data-table
-    :headers="gridHeaders"
-    :items="gridItems"
-    class="elevation-1"
-    :loading="gridLoading"
-    loading-text="Loading"
-  >
-    <!-- noData 처리 필요 -->
-    <template v-slot:no-data>
-      데이터 없음
-    </template>
-
-    <template v-slot:body="{items, headers}">
-      <tbody>
-        <tr
-          v-for="(item, idx) in items"
-          :key="idx"
-        >
-          <td
-            v-for="(header, key) in headers"
-            :key="key"
-            @click="rowClick(header, idx, key)"
+  <v-flex>
+    <v-data-table
+      :headers="gridHeaders"
+      :items="gridItems"
+      class="elevation-1"
+      :page.sync="page"
+      :loading="gridLoading"
+      hide-default-footer
+      :items-per-page="itemsPerPage"
+      @page-count="pageCount = $event"
+      @addRow="addDataRow"
+    >
+      <template v-slot:body="{items, headers}">
+        <tbody v-if="items.length > 0">
+          <tr
+            v-for="(item, idx) in items"
+            :key="idx"
           >
-            <v-text-field
-              v-if="editFlag === true && editRow === idx && editCol === key"
-              v-model="item[header.value]"
-              :hide-details="true"
-              dense
-              single-line
-              @keydown.enter="close"
-            />
-            <span v-else>{{ item[header.value] }}</span>
-            <!-- <v-edit-dialog
-              :return-value.sync="item[header.value]"
-              large
-              @save="save"
-              @cancel="cancel"
-              @open="open"
-              @close="close"
+            <td
+              v-for="(header, key) in headers"
+              :key="key"
+              @click="rowClick(header, idx, key)"
             >
-              {{ item[header.value] }}
-              <template v-slot:input>
-                <v-text-field
+              <template v-if="editFlag === true && editRow === idx && editCol === key">
+                <v-select
+                  v-if="header.dropdown"
                   v-model="item[header.value]"
-                  label="Edit"
-                  single-line
+                  :items="header.dropitems"
                 >
-                </v-text-field>
+                </v-select>
+                <v-text-field
+                  v-else
+                  v-model="item[header.value]"
+                  :hide-details="true"
+                  dense
+                  single-line
+                  @keydown.enter="close"
+                />
               </template>
-            </v-edit-dialog> -->
-          </td>
-        </tr>
-      </tbody>
-    </template>
-    <!-- [S]v-dailog -->
-  </v-data-table>
+              <span v-else>{{ item[header.value] }}</span>
+            </td>
+          </tr>
+        </tbody>
+        <!-- nodata -->
+        <tbody v-else>
+          <tr>
+            <td
+              :colspan="headers.length"
+              align="center"
+            >
+              {{ noResult }}
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-data-table>
+    <!-- [S]pagination -->
+    <div
+      class="text-xs-center pt-2"
+    >
+      <v-pagination
+        v-model="page"
+        :length="pageCount"
+        circle
+        @input="pageChangeHandle"
+      ></v-pagination>
+    </div>
+    <!-- [E]pagination -->
+  </v-flex>
 </template>
 
 <script>
@@ -75,31 +88,75 @@ export default {
       gridHeaderContainer: {},
       gridItemContainer: {},
       gridItemDefaultSet: {},
+
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 10,
+
       editFlag: false,
       editRow: 0,
       editCol: 0,
       editColumn: '',
+
+      noResult: '데이터가 존재하지 않습니다.',
     }
   },
+
   created() {
+    // grid header
     this.headers = this.gridHeaders
-    this.items = this.gridItems
     this.gridHeaderContainer = this.headers
+
+    // grid load data
+    this.items = this.gridItems
     this.gridItemContainer = this.items
-    this.gridItemDefaultSet = this.gridDefaultItems
+
+    // this.gridItemDefaultSet = this.gridDefaultItems // default items set
+
+    // loading indicator
     this.gridLoading = this.loading
   },
+
+  // method
   methods: {
     // ROW click event
     rowClick(header, idx, key) {
+      console.log('row click event')
       this.editFlag = true
       this.editRow = idx
       this.editCol = key
       this.editColumn = header.text
       console.log(this.editFlag, this.editIdx, this.editColumn)
+      this.addRow()
     },
     close() {
       this.editColumn = { ...this.gridItemDefaultSet }
+    },
+    testmethod() {
+      console.log('testmethod')
+    },
+
+    pageChangeHandle(page) {
+      console.log('page', page)
+    },
+
+    setTest() {
+      console.log('test')
+    },
+
+    addRow() {
+      console.log('addRow')
+
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < this.gridHeaderContainer.length; i++) {
+        this.gridItemDefaultSet[this.gridHeaderContainer[i].value] = ''
+      }
+
+      const addRowObject = { ...this.gridItemDefaultSet }
+      addRowObject.isNew = true
+      this.gridItems.unshift(addRowObject)
+
+      // let headerRow = this
     },
   },
 }

@@ -1,7 +1,7 @@
 import axios from '@/plugins/axios'
 
-function retrieveRiskList() {
-  return axios.post('/api/datatable/retrieveRiskList')
+function retrieveRiskList(params) {
+  return axios.post('/api/datatable/retrieveRiskList', params)
 }
 
 export {

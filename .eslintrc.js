@@ -44,6 +44,8 @@ module.exports = {
     // add new line below import
     'import/newline-after-import': ['error', { count: 1 }],
 
+    'object-curly-newline': 'off',
+
     'import/extensions': [
       'error',
       'ignorePackages',
