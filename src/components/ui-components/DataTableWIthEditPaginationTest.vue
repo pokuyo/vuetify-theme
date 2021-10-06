@@ -3,11 +3,11 @@
     <v-data-table
       class="elevation-1"
       hide-default-footer
-      :headers="gridHeaders"
-      :items="gridItems"
+      :headers="gridHeaderContainer"
+      :items="gridItemContainer"
       :loading="gridLoading"
-      :show-select="showSelect"
-      :single-select="singleSelect"
+      :show-select="selectFlag"
+      :single-select="multiSelectFlag"
       :page.sync="page"
       :items-per-page="itemsPerPage"
       @page-count="pageCount = $event"
@@ -62,7 +62,6 @@
                   :items="header.dropitems"
                   item-text="name"
                   item-value="value"
-                  readonly
                 ></v-select>
                 <span v-else>
                   {{ item[header.value] }}
@@ -107,30 +106,32 @@
 <script>
 export default {
   props: [
-    // eslint-disable-next-line vue/require-prop-types
-    'gridHeaders',
-    // eslint-disable-next-line vue/require-prop-types
-    'gridItems',
-    // eslint-disable-next-line vue/require-prop-types
-    'gridDefaultItems',
+    // // eslint-disable-next-line vue/require-prop-types
+    // 'gridHeaders',
+    // // eslint-disable-next-line vue/require-prop-types
+    // 'gridItems',
+    // // eslint-disable-next-line vue/require-prop-types
+    // 'gridDefaultItems',
     // eslint-disable-next-line vue/require-prop-types
     'showSelect',
-    // eslint-disable-next-line vue/require-prop-types
-    'singleSelect',
-    // eslint-disable-next-line vue/require-prop-types
-    'loading',
+
+    // // eslint-disable-next-line vue/require-prop-types
+    // 'singleSelect',
+    // // eslint-disable-next-line vue/require-prop-types
+    // 'loading',
   ],
   data() {
     return {
       // loading: false,
-      gridHeaderContainer: {},
-      gridItemContainer: {},
+      gridHeaderContainer: [],
+      gridItemContainer: [],
       gridItemDefaultSet: {},
 
       // pagination
-      page: 2,
-      pageCount: 0,
+      page: 1,
+      pageCountSet: 0,
       itemsPerPage: 10,
+      totalVisible: 10,
 
       // editOption
       editFlag: false,
@@ -138,13 +139,21 @@ export default {
       editCol: 0,
       editColumn: '',
 
-      // selectedOption
-      selectedItems: {},
-
-      useSelector: false,
+      // column checkbox option
+      selectFlag: false,
+      multiSelectFlag: false,
 
       noResult: '데이터가 존재하지 않습니다.',
     }
+  },
+
+  computed: {
+    pageCount: {
+      get() {
+        return this.pageCountSet
+      },
+      set() { },
+    },
   },
 
   created() {
@@ -164,7 +173,38 @@ export default {
 
   // method
   methods: {
-    // ROW click event
+    init(gridData) {
+      this.gridHeaderContainer = gridData.header
+      this.gridItemDefaultSet = gridData.items
+      this.selectFlag = gridData.selectFlag
+      this.multiSelectFlag = gridData.multiSelectFlag
+
+      // console.log('selectFlag', this.selectFlag)
+      // console.log('multiSelectFlag', this.multiSelectFlag)
+    },
+
+    setItems(gridData) {
+      console.log('setItems', gridData)
+      this.gridItemContainer = gridData.items
+      this.pageCountSet = Math.ceil(gridData.dataCount / this.itemsPerPage)
+      console.log('this.pageCount', this.pageCount)
+    },
+
+    addRow() {
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < this.gridHeaderContainer.length; i++) {
+        const value = this.gridHeaderContainer[i].defaultvalue === undefined ? '' : this.gridHeaderContainer[i].defaultvalue
+        this.gridItemDefaultSet[this.gridHeaderContainer[i].value] = value
+      }
+
+      const addRowObject = { ...this.gridItemDefaultSet }
+      addRowObject.isNew = true
+      if (this.gridItemContainer === undefined) {
+        this.gridItemContainer = []
+      }
+      this.gridItemContainer.unshift(addRowObject)
+    },
+
     rowClick(header, idx, key) {
       console.log('row click event')
       this.editFlag = true
@@ -174,41 +214,19 @@ export default {
       console.log(this.editFlag, this.editRow, this.editColumn)
     },
 
-    close() {
-      this.editColumn = { ...this.gridItemDefaultSet }
-    },
-
-    pageChangeHandle(page) {
-      console.log('page', page)
-    },
-
-    setPageInfo(pageInfo) {
-      console.log('in pageInfo', pageInfo)
-      this.page = pageInfo.curPage
-      console.log('this.pageCount1 : [', this.pageCount, ']')
-      this.pageCount = pageInfo.totPage
-      console.log('this.pageCount2 : [', this.pageCount, ']')
-      console.log('[', pageInfo, ']')
-      console.log('this.pageCount : [', this.pageCount, ']')
-    },
-
-    addRow() {
-      console.log('addRow')
-
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < this.gridHeaderContainer.length; i++) {
-        this.gridItemDefaultSet[this.gridHeaderContainer[i].value] = ''
-      }
-
-      const addRowObject = { ...this.gridItemDefaultSet }
-      addRowObject.isNew = true
-      this.gridItems.unshift(addRowObject)
-    },
-
     makeSelectedItems(item, idx) {
       // console.log('makeSelectedItems', item, idx)
       this.selectedItems[idx] = item
       console.log(this.selectedItems)
+    },
+
+    pageChangeHandle(page) {
+      this.page = page
+      console.log('this.page', this.page)
+    },
+
+    close() {
+      this.editColumn = { ...this.gridItemDefaultSet }
     },
   },
 }

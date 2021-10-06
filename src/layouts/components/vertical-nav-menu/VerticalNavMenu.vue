@@ -83,6 +83,11 @@
           :to="{ name: 'datatable' }"
           target="blank"
         ></nav-menu-link>
+        <nav-menu-link
+          title="datatabletest"
+          :to="{ name: 'datatabletest' }"
+          target="blank"
+        ></nav-menu-link>
       </nav-menu-group>
       <!-- [E]Sample Group -->
 
