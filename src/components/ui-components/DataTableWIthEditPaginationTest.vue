@@ -24,25 +24,27 @@
               @click="rowClick(header, idx, key)"
             >
               <!-- [S]checkbox -->
-              <template v-if="key === 0 && showSelect">
+              <template v-if="key === 0 && selectFlag === true">
                 <v-checkbox
                   class="mt-0"
-                  hide-details
+                  :hide-details="true"
+                  dense
                   @click="makeSelectedItems(item, idx)"
                 ></v-checkbox>
               </template>
               <!-- [E]checkbox -->
 
               <!-- [S]edit field -->
-              <template v-else-if="editFlag === true && editRow === idx && editCol === key">
+              <!-- <template v-else-if="editFlag === true && editRow === idx && editCol === key">
                 <v-select
                   v-if="header.dropdown"
                   v-model="item[header.value]"
                   :items="header.dropitems"
+                  :hide-details="true"
                   item-text="name"
                   item-value="value"
-                >
-                </v-select>
+                  dense
+                />
                 <v-text-field
                   v-else
                   v-model="item[header.value]"
@@ -51,22 +53,37 @@
                   single-line
                   @keydown.enter="close"
                 />
-              </template>
+              </template> -->
               <!-- [E]edit field -->
 
               <!-- [S]display data -->
-              <span v-else>
+              <template>
                 <v-select
                   v-if="header.dropdown"
                   v-model="item[header.value]"
                   :items="header.dropitems"
+                  :hide-details="true"
+                  :readonly="editFlag === false"
                   item-text="name"
                   item-value="value"
-                ></v-select>
-                <span v-else>
+                  dense
+                  flat
+                  solo
+                  @blur="editFlag = false"
+                />
+                <!-- <span v-else>
                   {{ item[header.value] }}
-                </span>
-              </span>
+                </span> -->
+                <v-text-field
+                  v-else
+                  v-model="item[header.value]"
+                  :hide-details="true"
+                  :readonly="editFlag === false"
+                  dense
+                  @keydown.enter="close"
+                  @blur="editFlag = false"
+                />
+              </template>
               <!-- [E]display data -->
             </td>
           </tr>
@@ -94,7 +111,7 @@
       <v-pagination
         v-model="page"
         :length="pageCount"
-        :total-visible="totalVisible"
+        :total-visible="10"
         circle
         @input="pageChangeHandle"
       ></v-pagination>
@@ -179,6 +196,8 @@ export default {
       this.selectFlag = gridData.selectFlag
       this.multiSelectFlag = gridData.multiSelectFlag
 
+      console.log(gridData)
+
       // console.log('selectFlag', this.selectFlag)
       // console.log('multiSelectFlag', this.multiSelectFlag)
     },
@@ -223,6 +242,7 @@ export default {
     pageChangeHandle(page) {
       this.page = page
       console.log('this.page', this.page)
+      this.$emit('movePage', this.page)
     },
 
     close() {
